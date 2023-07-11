@@ -55,9 +55,13 @@ class Movie
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies')]
     private Collection $genres;
 
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: Comment::class)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +149,36 @@ class Movie
     public function removeGenre(Genre $genre): static
     {
         $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getMovie() === $this) {
+                $comment->setMovie(null);
+            }
+        }
 
         return $this;
     }

@@ -23,6 +23,9 @@ class Comment
     #[ORM\Column(length: 255)]
     private ?string $score = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Movie $movie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Comment
     public function setScore(string $score): static
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getMovie(): ?Movie
+    {
+        return $this->movie;
+    }
+
+    public function setMovie(?Movie $movie): static
+    {
+        $this->movie = $movie;
 
         return $this;
     }
