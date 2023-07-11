@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Movie as MovieEntity;
 use App\Form\MovieType;
 use App\Model\Movie;
 use App\Repository\MovieRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,4 +80,27 @@ class MovieController extends AbstractController
             'editing_movie' => null !== $slug ? $movieEntity : null,
         ]);
     }
+
+
+    #[Route(
+        path: '/movies/{slug}/comment',
+        name: 'app_movie_comment',
+        requirements: [
+            'slug' => MovieEntity::SLUG_FORMAT,
+        ],
+        methods: ['GET']
+    )]
+    public function SeeComment(): Response
+    {
+        $comment = (new Comment())
+        ->setText('voici le commentaire')
+        ->setScore('1')
+        ->setReleasedAt(new DateTimeImmutable());
+
+        return $this->render('comment/index.html.twig', [
+            'title' => 'All comments',
+            'comment' => $comment,
+        ]);
+    }
+
 }
