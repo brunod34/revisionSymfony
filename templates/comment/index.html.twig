@@ -22,16 +22,13 @@
 			{{ title  }}
 		</h1>
 
+{{ form_start(commentForm) }}
 
-		<ul>
-			<li>
-				<label for="">Commentaire : </label><input type="text" value="{{comment.text}}"></li>
-			<li>
-				<label for="">Score : </label><input type="text" value="{{comment.score}}"></li>
-			<li>
-				<label for="">créé le :</label><input type="text" value="{{comment.releasedAt|format_date('medium') }}"></li>
+{{ form_widget(commentForm) }}
 
-		</ul>
+<input type="submit"/>
+{{ form_end(commentForm) }}
+
 	</div>
 {% endblock %}
 

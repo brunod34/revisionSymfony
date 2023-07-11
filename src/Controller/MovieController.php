@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Movie as MovieEntity;
+use App\Entity\Comment as CommentEntity ;
+use App\Form\CommentType;
 use App\Form\MovieType;
 use App\Model\Movie;
 use App\Repository\MovieRepository;
@@ -88,18 +90,25 @@ class MovieController extends AbstractController
         requirements: [
             'slug' => MovieEntity::SLUG_FORMAT,
         ],
-        methods: ['GET']
+        methods: ['GET', 'POST']
     )]
     public function SeeComment(): Response
     {
-        $comment = (new Comment())
+        $commentEntity = new CommentEntity;
+        
+
+        $commentEntity
         ->setText('voici le commentaire')
         ->setScore('1')
         ->setReleasedAt(new DateTimeImmutable());
 
+        $commentForm = $this->createForm(CommentType::class, $commentEntity);
+
+        
         return $this->render('comment/index.html.twig', [
+            'commentForm' => $commentForm,
             'title' => 'All comments',
-            'comment' => $comment,
+            'comment' => $commentEntity,
         ]);
     }
 
